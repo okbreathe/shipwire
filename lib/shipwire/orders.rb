@@ -35,5 +35,21 @@ module Shipwire
     def trackings(id)
       request(:get, "orders/#{id}/trackings")
     end
+
+    def holds_clear(id)
+      request(:post, "orders/#{id}/holds/clear")
+    end
+
+    def mark_processed(id)
+      request(:post, "orders/#{id}/markProcessed")
+    end
+
+    def mark_submitted(id)
+      request(:post, "orders/#{id}/markSubmitted")
+    end
+
+    def mark_complete(id)
+      request(:post, "orders/#{id}/markComplete")
+    end
   end
 end
