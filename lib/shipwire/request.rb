@@ -26,6 +26,10 @@ module Shipwire
     private
 
     def build_connection
+      if username.blank? || password.blank?
+        raise ArgumentError, 'Missing username or password'
+      end
+
       Faraday.new(url: base_url) do |connection|
         connection.request(:basic_auth, username, password)
         connection.request(:json)
@@ -40,6 +44,7 @@ module Shipwire
     end
 
     def make_request
+      puts "[Shipwire] Making #{@method} request to #{[base_url, full_path].join('')}"
       @connection.public_send(@method, full_path) do |request|
         request.params = params unless params.empty?
         request.options.open_timeout = Shipwire.configuration.open_timeout
@@ -50,6 +55,10 @@ module Shipwire
 
     def base_url
       Shipwire.configuration.endpoint.chomp("/")
+    end
+
+    def sandbox?
+      !!(base_url =~ /beta/)
     end
 
     def full_path
